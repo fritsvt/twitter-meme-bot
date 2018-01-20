@@ -12,6 +12,7 @@ var Connection sql.DB
 
 func Connect() {
 	driver := os.Getenv("DB_DRIVER")
+
 	if driver == "mysql" {
 		ConnectMysql()
 	} else if driver == "postgres" {
@@ -22,33 +23,20 @@ func Connect() {
 }
 
 func GetThreadById(id string) (bool) {
-	err := Connection.QueryRow("SELECT id FROM tweets WHERE reddit_id='?'", id).Scan(&id)
+	driver := os.Getenv("DB_DRIVER")
 
-	switch {
-	case err == sql.ErrNoRows:
-		return false
-	case err != nil:
-		log.Fatal(err)
-	default:
-		return true // there is a thread
+	if driver == "postgres" {
+		return PG_GetThreadById(id)
+	} else {
+		return MYSQL_GetThreadById(id)
 	}
-	return false
 }
 
 func InsertThread(thread structs.Thread) {
-	tx, err := Connection.Begin()
-	if err != nil {
-		log.Fatal(err)
+	driver := os.Getenv("DB_DRIVER")
+	if driver == "postgres" {
+		PG_InsertThread(thread)
+	} else {
+		MYSQL_InsertThread(thread)
 	}
-	defer tx.Rollback()
-	stmt, err := tx.Prepare("INSERT INTO `tweets` (`id`, `reddit_id`, `media_url`, `title`, `author`, `created_at`) VALUES (NULL, (?), (?), (?), (?), CURRENT_TIMESTAMP)")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close() // danger!
-	_, err = stmt.Exec(thread.Id, thread.ImageUrl, thread.Title, thread.Author)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = tx.Commit()
 }
