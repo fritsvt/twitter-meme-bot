@@ -21,7 +21,7 @@
 #  version = "2.4.0"
 
 [metadata.heroku]
-  root-package = "github.com/fritsvt/twitter-memes"
+  root-package = "twitter-meme-bot"
   go-version = "go1.9.2"
   install = [ "./..." ]
 
