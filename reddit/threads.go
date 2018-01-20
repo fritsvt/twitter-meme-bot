@@ -54,10 +54,14 @@ func filterThreads(threads structs.Threads) ([]structs.Thread) {
 	for _, element := range threads.Children {
 		if len(element.Data.Preview.Images) > 0 {
 			imageUrl := element.Data.Preview.Images[0].Source.URL
+			threadTitle := element.Data.Title
+			if len(threadTitle) > 190 {
+				threadTitle = threadTitle[:190]
+			}
 
 			thread := structs.Thread{
 				ImageUrl: imageUrl,
-				Title:    element.Data.Title,
+				Title:    threadTitle,
 				Id:       element.Data.ID,
 				Author:   element.Data.Author,
 			}

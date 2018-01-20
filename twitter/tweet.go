@@ -21,6 +21,10 @@ func Setup() {
 }
 
 func TweetThreads(threads []structs.Thread) {
+	if threads == nil {
+		return
+	}
+
 	for _, element := range threads {
 		SendTweet(element)
 	}
@@ -34,7 +38,7 @@ func SendTweet(thread structs.Thread) {
 	defer response.Body.Close()
 	if response.StatusCode == http.StatusOK {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
-		if (err != nil) {
+		if err != nil {
 			log.Fatal(err)
 		}
 		bodyString := string(bodyBytes)
@@ -42,7 +46,7 @@ func SendTweet(thread structs.Thread) {
 		str := base64.StdEncoding.EncodeToString([]byte(bodyString))
 
 		res, err := api.UploadMedia(str);
-		if (err != nil) {
+		if err != nil {
 			log.Fatal(err)
 		}
 
@@ -51,7 +55,7 @@ func SendTweet(thread structs.Thread) {
 		v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
 
 		println("Posting tweet: " + thread.Id)
-		api.PostTweet(thread.Title,  v);
+		api.PostTweet(thread.Title + " #dankmemes",  v);
 	}
 
 }
