@@ -7,7 +7,6 @@ import (
 	"twitter-meme-bot/reddit"
 	"twitter-meme-bot/twitter"
 
-	"log"
 	"time"
 	"net/http"
 	"fmt"
