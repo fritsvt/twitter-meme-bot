@@ -51,6 +51,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/lib/pq"
+  packages = [".","oid"]
+  revision = "27ea5d92de30060e7121ddd543fe14e9a327e0cc"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/net"
   packages = ["context"]
   revision = "5ccada7d0a7ba9aeb5d3aca8d3501b4c2a509fec"
@@ -58,6 +64,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "b95ee09157849b7e275a47cade3b3a06d3feefdc301d5335829eae506edf6ff8"
+  inputs-digest = "a0b5e9491ef0daaea3199fd6bbc17ea91ecefe0e112fe146bb0ceebe99e381ba"
   solver-name = "gps-cdcl"
   solver-version = 1

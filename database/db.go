@@ -11,12 +11,13 @@ import (
 var Connection sql.DB
 
 func Connect() {
-	conn, err := sql.Open("mysql", os.Getenv("DB_USERNAME") + ":"+ os.Getenv("DB_PASSWORD") + "@tcp("+ os.Getenv("DB_HOST") +")/"+os.Getenv("DB_NAME"))
-	Connection =  *conn
-
-	// if there is an error opening the connection, handle it
-	if err != nil {
-		panic(err.Error())
+	driver := os.Getenv("DB_DRIVER")
+	if driver == "mysql" {
+		ConnectMysql()
+	} else if driver == "postgres" {
+		ConnectPostgres()
+	} else {
+		log.Fatal("Invalid database driver")
 	}
 }
 
