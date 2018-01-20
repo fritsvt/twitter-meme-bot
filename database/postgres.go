@@ -8,7 +8,9 @@ import (
 
 func ConnectPostgres() {
 	connStr := "postgres://"+os.Getenv("DB_USERNAME")+":"+os.Getenv("DB_PASSWORD")+"@"+os.Getenv("DB_HOST"+"/"+os.Getenv("DB_NAME"))
-
+	if os.Getenv("DATABASE_URL") != "" {
+		connStr = os.Getenv("DATABASE_URL")
+	}
 	conn, err := sql.Open("postgres", connStr)
 	Connection =  *conn
 
@@ -17,4 +19,3 @@ func ConnectPostgres() {
 		panic(err.Error())
 	}
 }
-x
