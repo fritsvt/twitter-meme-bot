@@ -31,7 +31,7 @@ func GetThreads() (*[]structs.Thread) {
 
 	if response.StatusCode != http.StatusOK || err != nil {
 		println("Error getting api data, status code: " + strconv.Itoa(response.StatusCode))
-		return nil
+		return &[]structs.Thread{}
 	}
 
 	body, err := ioutil.ReadAll(response.Body)

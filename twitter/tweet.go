@@ -51,7 +51,7 @@ func SendTweet(thread structs.Thread) {
 		}
 
 		v := url.Values{}
-		//v.Set("media_ids", res.MediaID)
+
 		v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
 
 		println("Posting tweet: " + thread.Id)
