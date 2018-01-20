@@ -22,7 +22,7 @@ func Connect() {
 }
 
 func GetThreadById(id string) (bool) {
-	err := Connection.QueryRow("SELECT id FROM tweets WHERE reddit_id=?", id).Scan(&id)
+	err := Connection.QueryRow("SELECT id FROM tweets WHERE reddit_id='?'", id).Scan(&id)
 
 	switch {
 	case err == sql.ErrNoRows:
