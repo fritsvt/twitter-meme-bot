@@ -25,9 +25,10 @@ func main() {
 
 	println("Bot starting...")
 
-	go loopInterval(60) // start the loop
+	go loopInterval(10) // start the loop
 
 	// Http server so we can deploy on Heroku
+	println("Web server listening on :"+os.Getenv("PORT"));
 	http.HandleFunc("/", httpHandler)
 	http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 }

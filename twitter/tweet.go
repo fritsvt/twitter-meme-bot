@@ -22,7 +22,11 @@ func Setup() {
 
 func TweetThreads(threads []structs.Thread) {
 	if threads == nil {
+		println("Warning, Encountered nil value in threads")
 		return
+	}
+	if len(threads) < 1 {
+		println("No new threads found.")
 	}
 
 	for _, element := range threads {
@@ -55,7 +59,7 @@ func SendTweet(thread structs.Thread) {
 		v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
 
 		println("Posting tweet: " + thread.Id)
-		api.PostTweet(thread.Title + " #dankmemes",  v);
+		//api.PostTweet(thread.Title + " #dankmemes",  v);
 	}
 
 }

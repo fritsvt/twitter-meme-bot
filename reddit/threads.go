@@ -13,7 +13,7 @@ import (
 )
 
 func GetThreads() (*[]structs.Thread) {
-	println("Checking for new threads to post")
+	println("Checking for new threads to post...")
 
 	client := &http.Client{}
 
@@ -44,6 +44,8 @@ func GetThreads() (*[]structs.Thread) {
 		defer response.Body.Close()
 
 		return &filteredThreads
+	} else {
+		fmt.Println(err)
 	}
 	return &[]structs.Thread{}
 }
@@ -81,5 +83,6 @@ func parseResponse(body []byte) (*structs.RedditResponse, error) {
 	if err != nil {
 		fmt.Println("whoops:", err)
 	}
+
 	return s, err
 }
