@@ -20,20 +20,6 @@ func Setup() {
 	api = *anaconda.NewTwitterApi(os.Getenv("TWITTER_ACCESS_TOKEN"), os.Getenv("TWITTER_ACCESS_TOKEN_SECRET"))
 }
 
-func TweetThreads(threads []structs.Thread) {
-	if threads == nil {
-		println("Warning, Encountered nil value in threads")
-		return
-	}
-	if len(threads) < 1 {
-		println("No new threads found.")
-	}
-
-	for _, element := range threads {
-		SendTweet(element)
-	}
-}
-
 func SendTweet(thread structs.Thread) {
 	response, e := http.Get(thread.ImageUrl)
 	if e != nil {
@@ -59,7 +45,7 @@ func SendTweet(thread structs.Thread) {
 		v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
 
 		println("Posting tweet: " + thread.Id)
-		api.PostTweet(thread.Title + " #dankmemes",  v);
+		//api.PostTweet(thread.Title + " #dankmemes",  v);
 	}
 
 }

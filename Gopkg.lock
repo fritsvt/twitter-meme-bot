@@ -44,6 +44,12 @@
   version = "v1.3"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/golang/protobuf"
+  packages = ["proto"]
+  revision = "1e59b77b52bf8e4b449a57e6f79f21226d571845"
+
+[[projects]]
   name = "github.com/joho/godotenv"
   packages = ["."]
   revision = "a79fa1e548e2c689c241d10173efd51e5d689d5b"
@@ -57,13 +63,43 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/mitchellh/mapstructure"
+  packages = ["."]
+  revision = "b4575eea38cca1123ec2dc90c26529b5c5acfcff"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/turnage/graw"
+  packages = [".","botfaces","reddit","streams","streams/internal/monitor","streams/internal/rsort"]
+  revision = "f28dd708bed84317008cf0a609552b981bc6a6f4"
+
+[[projects]]
+  name = "github.com/turnage/redditproto"
+  packages = ["."]
+  revision = "e5041bea89ff1f806a75e266af69f4fb82f1eff3"
+  version = "2.1.0"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/net"
-  packages = ["context"]
+  packages = ["context","context/ctxhttp"]
   revision = "5ccada7d0a7ba9aeb5d3aca8d3501b4c2a509fec"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/oauth2"
+  packages = [".","internal"]
+  revision = "b28fcf2b08a19742b43084fb40ab78ac6c3d8067"
+
+[[projects]]
+  name = "google.golang.org/appengine"
+  packages = ["internal","internal/base","internal/datastore","internal/log","internal/remote_api","internal/urlfetch","urlfetch"]
+  revision = "150dc57a1b433e64154302bdc40b6bb8aefa313a"
+  version = "v1.0.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a0b5e9491ef0daaea3199fd6bbc17ea91ecefe0e112fe146bb0ceebe99e381ba"
+  inputs-digest = "c86a5f3b45ea86950bc2b1ad4277408c0850b21455aeb09951e3af6cc36dfada"
   solver-name = "gps-cdcl"
   solver-version = 1

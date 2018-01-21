@@ -7,7 +7,6 @@ import (
 	"twitter-meme-bot/reddit"
 	"twitter-meme-bot/twitter"
 
-	"time"
 	"net/http"
 	"fmt"
 	"os"
@@ -25,20 +24,12 @@ func main() {
 
 	println("Bot starting...")
 
-	go loopInterval(10) // start the loop
+	go reddit.GetThreads()
 
 	// Http server so we can deploy on Heroku
 	println("Web server listening on :"+os.Getenv("PORT"));
 	http.HandleFunc("/", httpHandler)
 	http.ListenAndServe(":"+os.Getenv("PORT"), nil)
-}
-
-func loopInterval(interval time.Duration) {
-	twitter.TweetThreads(*reddit.GetThreads())
-
-	for range time.Tick(time.Second * interval){
-		twitter.TweetThreads(*reddit.GetThreads())
-	}
 }
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {

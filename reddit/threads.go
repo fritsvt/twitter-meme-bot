@@ -1,88 +1,64 @@
 package reddit
 
 import (
-	"net/http"
 	"os"
-	"encoding/json"
 	"log"
 	"fmt"
-	"strconv"
-	"io/ioutil"
 	"twitter-meme-bot/database"
 	"twitter-meme-bot/structs"
+	"github.com/turnage/graw"
+	"github.com/turnage/graw/reddit"
+	"time"
+	"path/filepath"
+	"twitter-meme-bot/twitter"
 )
 
-func GetThreads() (*[]structs.Thread) {
-	println("Checking for new threads to post...")
+type filterThreads struct{}
 
-	client := &http.Client{}
+func GetThreads() (*structs.Thread) {
+	startRedditStream()
 
-	req, err := http.NewRequest("GET", "https://api.reddit.com/r/" + os.Getenv("SUB_REDDIT") + "/controversial/", nil)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	req.Header.Set("User-Agent", "Meme-House")
-
-	response, err := client.Do(req)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	if response.StatusCode != http.StatusOK || err != nil {
-		println("Error getting api data, status code: " + strconv.Itoa(response.StatusCode))
-		return &[]structs.Thread{}
-	}
-
-	body, err := ioutil.ReadAll(response.Body)
-	s, err := parseResponse([]byte(body))
-	if err == nil {
-		threads := s.Data.Threads
-
-		filteredThreads := filterThreads(threads)
-
-		defer response.Body.Close()
-
-		return &filteredThreads
-	} else {
-		fmt.Println(err)
-	}
-	return &[]structs.Thread{}
+	return &structs.Thread{}
 }
 
-func filterThreads(threads structs.Threads) ([]structs.Thread) {
-	FormattedThreads := []structs.Thread{}
-
-	for _, element := range threads.Children {
-		if len(element.Data.Preview.Images) > 0 {
-			imageUrl := element.Data.Preview.Images[0].Source.URL
-			threadTitle := element.Data.Title
-			if len(threadTitle) > 190 {
-				threadTitle = threadTitle[:190]
-			}
-
-			thread := structs.Thread{
-				ImageUrl: imageUrl,
-				Title:    threadTitle,
-				Id:       element.Data.ID,
-				Author:   element.Data.Author,
-			}
-
-			if database.GetThreadById(element.Data.ID) == false {
-				FormattedThreads = append(FormattedThreads, thread)
-				database.InsertThread(thread)
-			}
-		}
+func startRedditStream() {
+	println("Starting streaming posts from /r/r" + os.Getenv("SUB_REDDIT"))
+	// Get an api handle to reddit for a logged out (script) program,
+	apiHandle, err := reddit.NewScript("meme-house", 5 * time.Second)
+	if err != nil {
+		log.Fatal(err)
 	}
-	return FormattedThreads
+
+	// Create a configuration specifying what event sources on Reddit graw
+	cfg := graw.Config{Subreddits: []string{os.Getenv("SUB_REDDIT")}}
+
+	// launch a graw scan in a goroutine using the bot handle
+	_, wait, err := graw.Scan(&filterThreads{}, apiHandle, cfg)
+	if err := wait(); err != nil {
+		fmt.Printf("graw run encountered an error: %v\n", err)
+	}
 }
 
-func parseResponse(body []byte) (*structs.RedditResponse, error) {
-	var s = new(structs.RedditResponse)
-	err := json.Unmarshal(body, &s)
-	if err != nil {
-		fmt.Println("whoops:", err)
+func (a *filterThreads) Post(post *reddit.Post) error {
+	extension := filepath.Ext(post.URL)
+
+	if extension != ".jpg" && extension != ".png" && extension != ".jpeg" && extension != ".gif" {
+		return nil
 	}
 
-	return s, err
+	threadTitle := post.Title
+	if len(threadTitle) > 190 {
+		threadTitle = threadTitle[:190]
+	}
+	thread := structs.Thread{
+		ImageUrl: post.URL,
+		Title:    threadTitle,
+		Id:       post.ID,
+		Author:   post.Author,
+	}
+	if database.GetThreadById(post.ID) == false {
+		database.InsertThread(thread)
+		twitter.SendTweet(thread)
+	}
+	return nil
 }
