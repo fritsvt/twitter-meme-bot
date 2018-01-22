@@ -28,7 +28,7 @@ func GetThreads() {
 		return
 	}
 
-	harvest, err := bot.Listing("/r/"+os.Getenv("SUB_REDDIT")+"/controversial", "")
+	harvest, err := bot.Listing("/r/"+os.Getenv("SUB_REDDIT")+"/"+os.Getenv("REDDIT_SORT"), "")
 	if err != nil {
 		fmt.Println("Failed to fetch /r/"+os.Getenv("SUB_REDDIT")+": ", err)
 		return
