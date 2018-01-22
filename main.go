@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"twitter-meme-bot/structs"
 )
 
 func main() {
@@ -34,7 +35,10 @@ func main() {
 }
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello there")
+	thread := structs.Thread{}
+	database.DB.Last(&thread)
+
+	fmt.Fprintf(w, "Last tweet: "+ thread.Title +" send at " + thread.Model.CreatedAt.Format("Jan 2, 2006 at 15:04pm (MST)"))
 }
 
 func loopInterval(interval time.Duration) {

@@ -11,7 +11,7 @@ import (
 )
 
 func GetThreads() {
-	fmt.Println("fetching threads from /r/" + os.Getenv("SUB_REDDIT"))
+	fmt.Println("fetching threads from /r/" + os.Getenv("SUB_REDDIT") + "/" + os.Getenv("REDDIT_SORT"))
 
 	cfg := reddit.BotConfig{
 		Agent: "graw:twitter-meme-uouse:1.0.1 by /u/zwembadsniper",
