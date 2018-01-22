@@ -1,42 +1,41 @@
 package database
 
 import (
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
-	"os"
-	"log"
 	"twitter-meme-bot/structs"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"os"
 )
 
-var Connection sql.DB
+var DB = gorm.DB{}
 
 func Connect() {
-	driver := os.Getenv("DB_DRIVER")
-
-	if driver == "mysql" {
-		ConnectMysql()
-	} else if driver == "postgres" {
-		ConnectPostgres()
-	} else {
-		log.Fatal("Invalid database driver")
+	db, err := gorm.Open("sqlite3", os.Getenv("DB_FILE"))
+	if err != nil {
+		panic("failed to connect database")
 	}
+	DB = *db;
+
+	// Migrate db
+	db.AutoMigrate(&structs.Thread{})
 }
 
 func GetThreadById(id string) (bool) {
-	driver := os.Getenv("DB_DRIVER")
+	var thread structs.Thread
+	DB.First(&thread, "reddit_id = ?", id)
 
-	if driver == "postgres" {
-		return PG_GetThreadById(id)
-	} else {
-		return MYSQL_GetThreadById(id)
+	if thread.ID != 0 {
+		return true
 	}
+	return false
 }
 
 func InsertThread(thread structs.Thread) {
-	driver := os.Getenv("DB_DRIVER")
-	if driver == "postgres" {
-		PG_InsertThread(thread)
-	} else {
-		MYSQL_InsertThread(thread)
-	}
+	DB.Create(&structs.Thread{
+		RedditId:thread.RedditId,
+		ImageUrl:thread.ImageUrl,
+		Title:thread.Title,
+		Author:thread.Author,
+	})
 }

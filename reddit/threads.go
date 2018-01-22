@@ -2,44 +2,47 @@ package reddit
 
 import (
 	"os"
-	"log"
 	"fmt"
 	"twitter-meme-bot/database"
 	"twitter-meme-bot/structs"
-	"github.com/turnage/graw"
 	"github.com/turnage/graw/reddit"
-	"time"
 	"path/filepath"
 	"twitter-meme-bot/twitter"
 )
 
-type filterThreads struct{}
+func GetThreads() {
+	fmt.Println("fetching threads from /r/" + os.Getenv("SUB_REDDIT"))
 
-func GetThreads() (*structs.Thread) {
-	startRedditStream()
-
-	return &structs.Thread{}
-}
-
-func startRedditStream() {
-	println("Starting streaming posts from /r/r" + os.Getenv("SUB_REDDIT"))
-	// Get an api handle to reddit for a logged out (script) program,
-	apiHandle, err := reddit.NewScript("meme-house", 5 * time.Second)
+	cfg := reddit.BotConfig{
+		Agent: "graw:twitter-meme-uouse:1.0.1 by /u/zwembadsniper",
+		// Your registered app info from following:
+		// https://github.com/reddit/reddit/wiki/OAuth2
+		App: reddit.App{
+			ID:     os.Getenv("REDDIT_APP_ID"),
+			Secret: os.Getenv("REDDIT_APP_SECRET"),
+			Username: os.Getenv("REDDIT_USERNAME"),
+			Password: os.Getenv("REDDIT_PASSWORD"),
+		},
+	}
+	bot, err := reddit.NewBot(cfg)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Failed to create bot handle: ", err)
+		return
 	}
 
-	// Create a configuration specifying what event sources on Reddit graw
-	cfg := graw.Config{Subreddits: []string{os.Getenv("SUB_REDDIT")}}
+	harvest, err := bot.Listing("/r/"+os.Getenv("SUB_REDDIT")+"/controversial", "")
+	if err != nil {
+		fmt.Println("Failed to fetch /r/"+os.Getenv("SUB_REDDIT")+": ", err)
+		return
+	}
 
-	// launch a graw scan in a goroutine using the bot handle
-	_, wait, err := graw.Scan(&filterThreads{}, apiHandle, cfg)
-	if err := wait(); err != nil {
-		fmt.Printf("graw run encountered an error: %v\n", err)
+	for _, post := range harvest.Posts[:25] {
+		//fmt.Printf("[%s] posted [%s]\n", post.Author, post.Title)
+		filterThread(post)
 	}
 }
 
-func (a *filterThreads) Post(post *reddit.Post) error {
+func filterThread (post *reddit.Post) error {
 	extension := filepath.Ext(post.URL)
 
 	if extension != ".jpg" && extension != ".png" && extension != ".jpeg" && extension != ".gif" {
@@ -53,7 +56,7 @@ func (a *filterThreads) Post(post *reddit.Post) error {
 	thread := structs.Thread{
 		ImageUrl: post.URL,
 		Title:    threadTitle,
-		Id:       post.ID,
+		RedditId:       post.ID,
 		Author:   post.Author,
 	}
 	if database.GetThreadById(post.ID) == false {

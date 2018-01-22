@@ -56,3 +56,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/turnage/graw"
+
+[[constraint]]
+  name = "github.com/jinzhu/gorm"
+  version = "1.0.0"

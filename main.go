@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"fmt"
 	"os"
+	"time"
 )
 
 func main() {
@@ -24,7 +25,7 @@ func main() {
 
 	println("Bot starting...")
 
-	go reddit.GetThreads()
+	go loopInterval(10)
 
 	// Http server so we can deploy on Heroku
 	println("Web server listening on :"+os.Getenv("PORT"));
@@ -34,4 +35,12 @@ func main() {
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello there")
+}
+
+func loopInterval(interval time.Duration) {
+	reddit.GetThreads()
+
+	for range time.Tick(time.Second * interval){
+		reddit.GetThreads()
+	}
 }
