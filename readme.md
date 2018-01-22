@@ -8,6 +8,7 @@ I created the bot to run of the [@memesforfemes](https://twitter.com/memesforfem
 I use [dep](https://github.com/golang/dep) to manage my dependencies so make sure you have that installed before proceeding.
 
 - Create a twitter application at [apps.twitter.com](https://apps.twitter.com/app/new)
+- And create a Reddit app at [reddit.com](https://www.reddit.com/prefs/apps)
 - After installing dep copy the contents of [.env.example](.env.example) into your own .env and fill it out with your credentials.
 - Now that your credentials are in place you can execute the 2 commands below and your bot should be up and running.
 ```sh

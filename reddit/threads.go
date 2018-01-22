@@ -15,8 +15,6 @@ func GetThreads() {
 
 	cfg := reddit.BotConfig{
 		Agent: "graw:twitter-meme-uouse:1.0.1 by /u/zwembadsniper",
-		// Your registered app info from following:
-		// https://github.com/reddit/reddit/wiki/OAuth2
 		App: reddit.App{
 			ID:     os.Getenv("REDDIT_APP_ID"),
 			Secret: os.Getenv("REDDIT_APP_SECRET"),
