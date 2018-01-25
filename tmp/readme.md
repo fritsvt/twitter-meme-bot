@@ -1,1 +1,1 @@
-Temp images get stores here
+Temp images get stored here
