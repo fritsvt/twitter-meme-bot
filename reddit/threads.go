@@ -10,7 +10,10 @@ import (
 	"twitter-meme-bot/twitter"
 )
 
-func GetThreads() {
+var tweetThreads = true
+
+func GetThreads(tweet bool) {
+	tweetThreads = tweet
 	fmt.Println("fetching threads from /r/" + os.Getenv("SUB_REDDIT") + "/" + os.Getenv("REDDIT_SORT"))
 
 	cfg := reddit.BotConfig{
@@ -59,7 +62,11 @@ func filterThread (post *reddit.Post) error {
 	}
 	if database.GetThreadById(post.ID) == false {
 		database.InsertThread(thread)
-		twitter.SendTweet(thread)
+		if tweetThreads {
+			twitter.SendTweet(thread)
+		} else {
+			println("Inserting but not tweeting " + thread.RedditId)
+		}
 	}
 	return nil
 }

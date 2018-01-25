@@ -38,13 +38,13 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 	thread := structs.Thread{}
 	database.DB.Last(&thread)
 
-	fmt.Fprintf(w, "Last tweet: "+ thread.Title +" send at " + thread.Model.CreatedAt.Format("Jan 2, 2006 at 15:04pm (MST)"))
+	fmt.Fprintf(w, "Last tweet: "+ thread.Title +" send at " + thread.Model.CreatedAt.Format("Jan 2, at 15:04pm"))
 }
 
 func loopInterval(interval time.Duration) {
-	reddit.GetThreads()
+	reddit.GetThreads(false)
 
 	for range time.Tick(time.Second * interval){
-		reddit.GetThreads()
+		reddit.GetThreads(true)
 	}
 }

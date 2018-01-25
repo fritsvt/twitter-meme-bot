@@ -75,8 +75,14 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/nfnt/resize"
+  packages = ["."]
+  revision = "891127d8d1b52734debe1b3c3d7e747502b6c366"
+
+[[projects]]
+  branch = "master"
   name = "github.com/turnage/graw"
-  packages = [".","botfaces","reddit","streams","streams/internal/monitor","streams/internal/rsort"]
+  packages = ["reddit"]
   revision = "f28dd708bed84317008cf0a609552b981bc6a6f4"
 
 [[projects]]
@@ -106,6 +112,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "782fc9b7390b5f188e4d1ba5fdb55a68ab2d7c564b3dea2911f05e8d5d9ee03a"
+  inputs-digest = "577f2c174ac3dd42d0d64b407aff1193d9f27fbacfa8a5ee652c0c67cec16c43"
   solver-name = "gps-cdcl"
   solver-version = 1
