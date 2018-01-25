@@ -3,6 +3,7 @@ package twitter
 import (
 	"os"
 	"github.com/ChimeraCoder/anaconda"
+	"github.com/devedge/imagehash"
 	"log"
 	"net/url"
 	"net/http"
@@ -10,6 +11,8 @@ import (
 	"io/ioutil"
 	"strconv"
 	"twitter-meme-bot/structs"
+	"encoding/hex"
+	"twitter-meme-bot/database"
 )
 
 var api anaconda.TwitterApi
@@ -26,6 +29,7 @@ func SendTweet(thread structs.Thread) {
 		log.Fatal(e)
 	}
 	defer response.Body.Close()
+
 	if response.StatusCode == http.StatusOK {
 		bodyBytes, err := ioutil.ReadAll(response.Body)
 		if err != nil {
@@ -35,17 +39,41 @@ func SendTweet(thread structs.Thread) {
 
 		str := base64.StdEncoding.EncodeToString([]byte(bodyString))
 
-		res, err := api.UploadMedia(str);
-		if err != nil {
-			log.Fatal(err)
+		hash := getImageHash([]byte(bodyString), thread)
+
+		thread.ImageHash = hash
+
+		if !database.GetThreadByHash(hash) {
+			database.InsertThread(thread)
+
+			res, err := api.UploadMedia(str);
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			v := url.Values{}
+
+			v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
+
+			println("Posting tweet: " + thread.RedditId)
+			api.PostTweet(thread.Title + " #dankmemes",  v);
+		} else {
+			println("duplicate image found: " + thread.RedditId)
 		}
-
-		v := url.Values{}
-
-		v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
-
-		println("Posting tweet: " + thread.RedditId)
-		api.PostTweet(thread.Title + " #dankmemes",  v);
 	}
 
+}
+
+func getImageHash(image []byte, thread structs.Thread) (hash string) {
+	err := ioutil.WriteFile("./tmp/"+thread.RedditId+thread.Extension, image, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	src, _ := imagehash.OpenImg("./tmp/"+thread.RedditId+thread.Extension)
+	rawHash, _ := imagehash.Dhash(src, 16)
+
+	os.Remove("./tmp/"+thread.RedditId+thread.Extension)
+
+	return hex.EncodeToString(rawHash)
 }

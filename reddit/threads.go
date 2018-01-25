@@ -59,9 +59,9 @@ func filterThread (post *reddit.Post) error {
 		Title:    threadTitle,
 		RedditId:       post.ID,
 		Author:   post.Author,
+		Extension:extension,
 	}
 	if database.GetThreadById(post.ID) == false {
-		database.InsertThread(thread)
 		if tweetThreads {
 			twitter.SendTweet(thread)
 		} else {

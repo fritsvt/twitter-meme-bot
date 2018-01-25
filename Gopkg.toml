@@ -60,3 +60,7 @@
 [[constraint]]
   name = "github.com/jinzhu/gorm"
   version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/devedge/imagehash"
+  version = "1.1.0"

@@ -20,6 +20,18 @@
   revision = "53511d3c733003985b0b76f733df1f4d0095ee6a"
 
 [[projects]]
+  name = "github.com/devedge/imagehash"
+  packages = ["."]
+  revision = "ff4a42b55bf7df888d13813355a121810b858390"
+  version = "v1.1"
+
+[[projects]]
+  name = "github.com/disintegration/imaging"
+  packages = ["."]
+  revision = "1884593a19ddc6f2ea050403430d02c1d0fc1283"
+  version = "v1.3.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/dustin/go-jsonpointer"
   packages = ["."]
@@ -75,12 +87,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/nfnt/resize"
-  packages = ["."]
-  revision = "891127d8d1b52734debe1b3c3d7e747502b6c366"
-
-[[projects]]
-  branch = "master"
   name = "github.com/turnage/graw"
   packages = ["reddit"]
   revision = "f28dd708bed84317008cf0a609552b981bc6a6f4"
@@ -90,6 +96,12 @@
   packages = ["."]
   revision = "e5041bea89ff1f806a75e266af69f4fb82f1eff3"
   version = "2.1.0"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/image"
+  packages = ["bmp","tiff","tiff/lzw"]
+  revision = "12117c17ca67ffa1ce22e9409f3b0b0a93ac08c7"
 
 [[projects]]
   branch = "master"
@@ -112,6 +124,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "577f2c174ac3dd42d0d64b407aff1193d9f27fbacfa8a5ee652c0c67cec16c43"
+  inputs-digest = "183d05ced10a27ea1f71501c445c830f6228a110eca13fd6db187e6ab41f078a"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -37,5 +37,15 @@ func InsertThread(thread structs.Thread) {
 		ImageUrl:thread.ImageUrl,
 		Title:thread.Title,
 		Author:thread.Author,
+		ImageHash:thread.ImageHash,
 	})
+}
+
+func GetThreadByHash(hash string) (bool) {
+	var thread structs.Thread
+	DB.First(&thread, "image_hash = ?", hash)
+	if thread.ID != 0 {
+		return true
+	}
+	return false;
 }
