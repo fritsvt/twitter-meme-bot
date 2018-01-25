@@ -3,6 +3,12 @@
 This is a twitter bot made in [Golang](https://golang.org), It's goal is to look up images on [Reddit](https://reddit.com) and posts them on [Twitter](https://twitter.com)
 I created the bot to run of the [@memesforfemes](https://twitter.com/memesforfemes) Twitter account but feel free to make your own.
 
+## Features
+
+- Light weight
+- Easily customizable
+- Duplicate Image hash checking
+
 ## Installation
 
 I use [dep](https://github.com/golang/dep) to manage my dependencies so make sure you have that installed before proceeding.
