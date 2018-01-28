@@ -12,11 +12,6 @@ func GetNewSchedule(w http.ResponseWriter, r *http.Request) {
 	scheduledTweets := []structs.ScheduledTweet{}
 	database.DB.Order("created_at desc").Limit(100).Find(&scheduledTweets)
 
-	for _, element := range scheduledTweets {
-		println(element.ID)
-		// element is the element from someSlice for where we are
-	}
-
 	renderView(w, r, "app.html", "schedule_new_tweet.html", scheduledTweets)
 }
 

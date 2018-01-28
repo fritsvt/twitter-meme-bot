@@ -23,7 +23,7 @@ func StartStream() {
 		switch v := tweet.(type) {
 		case anaconda.Tweet:
 			fmt.Printf("%-15s: %s\n", v.User.ScreenName, v.Text)
-			go checkSchedule(v.User.ScreenName, v.IdStr)
+			checkSchedule(v.User.ScreenName, v.IdStr)
 		case anaconda.EventTweet:
 			switch v.Event.Event {
 			case "favorite":
