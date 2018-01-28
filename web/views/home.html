@@ -1,0 +1,7 @@
+{{ define "title" }} Twitter-meme-bot {{ end }}
+{{ define "stylesheets" }} {{ end }}
+{{ define "content" }}
+
+Last tweet: {{ .Data.Thread.Title }}, send at: {{ .Data.CreatedAt }}
+
+{{ end }}

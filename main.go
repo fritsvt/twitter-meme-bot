@@ -2,16 +2,16 @@ package main
 
 import (
 	"github.com/joho/godotenv"
+	"github.com/gorilla/mux"
 
 	"twitter-meme-bot/database"
 	"twitter-meme-bot/reddit"
 	"twitter-meme-bot/twitter"
+	"twitter-meme-bot/web"
 
 	"net/http"
-	"fmt"
 	"os"
 	"time"
-	"twitter-meme-bot/structs"
 )
 
 func main() {
@@ -26,19 +26,18 @@ func main() {
 
 	println("Bot starting...")
 
+	go twitter.StartStream()
+
 	go loopInterval(10)
 
-	// Http server so we can deploy on Heroku
+	// http server so we can deploy on Heroku
 	println("Web server listening on :"+os.Getenv("PORT"));
-	http.HandleFunc("/", httpHandler)
-	http.ListenAndServe(":"+os.Getenv("PORT"), nil)
-}
 
-func httpHandler(w http.ResponseWriter, r *http.Request) {
-	thread := structs.Thread{}
-	database.DB.Last(&thread)
+	r := mux.NewRouter()
+	r = web.RegisterRoutes(*r)
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./web/static/")))
 
-	fmt.Fprintf(w, "Last tweet: "+ thread.Title +" send at " + thread.Model.CreatedAt.Format("Jan 2, at 15:04pm"))
+	http.ListenAndServe(":"+os.Getenv("PORT"), r)
 }
 
 func loopInterval(interval time.Duration) {

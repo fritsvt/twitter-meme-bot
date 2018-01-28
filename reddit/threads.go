@@ -63,7 +63,7 @@ func filterThread (post *reddit.Post) error {
 	}
 	if database.GetThreadById(post.ID) == false {
 		if tweetThreads {
-			twitter.SendTweet(thread)
+			twitter.SendTweet(thread, true, nil)
 		} else {
 			database.InsertThread(thread)
 			println("Inserting but not tweeting " + thread.RedditId)
