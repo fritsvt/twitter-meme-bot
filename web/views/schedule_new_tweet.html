@@ -1,0 +1,48 @@
+{{ define "title" }} Schedule new tweet {{ end }}
+
+{{ define "stylesheets" }}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <style>
+            .form-control {
+                margin-bottom: 10px;
+            }
+            code {
+                color: #e83e8c !important;
+            }
+        </style>
+{{ end }}
+
+{{ define "content" }}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    {{ if .Flash.Message }}
+                        <div class="mt-2 alert alert-{{ .Flash.Level }}" role="alert">
+                        {{ .Flash.Message }}
+                        </div>
+                    {{ end }}
+
+                    <h4 class="mt-3 mb-4">Schedule a new tweet</h4>
+
+                    <form action="" method="post">
+                        <input class="form-control" type="text" name="img_url" placeholder="image url">
+                        <input class="form-control" type="text" name="tweet" placeholder="tweet title">
+                        <input class="form-control" type="text" name="username" placeholder="username to reply to">
+                        <p style="margin-top: -10px; padding: 0">Make sure the bot follows this user</p>
+                        <input class="form-control mt-4" type="password" name="password" placeholder="Password">
+                        <input class="btn btn-primary w-100" type="submit" value="schedule">
+                    </form>
+
+                    {{ if .Data }}
+                         <h5 class="mt-5">Scheduled tweets</h5>
+                        {{range .Data }}
+                            <div style="padding: 10px; margin-bottom: 5px" class="card">
+                                <span><strong>{{ .Title }}</strong> to <a target="_blank" href="https://twitter.com/{{ .ToUser }}"><code>@{{.ToUser}}</code></a></span>
+                                <a target="_blank" href="{{.ImageUrl}}">{{.ImageUrl}}</a>
+                            </div>
+                        {{end}}
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+{{ end }}

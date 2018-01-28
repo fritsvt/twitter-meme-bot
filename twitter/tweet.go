@@ -23,7 +23,7 @@ func Setup() {
 	api = *anaconda.NewTwitterApi(os.Getenv("TWITTER_ACCESS_TOKEN"), os.Getenv("TWITTER_ACCESS_TOKEN_SECRET"))
 }
 
-func SendTweet(thread structs.Thread) {
+func SendTweet(thread structs.Thread, checkImageHash bool, scheduled *structs.ScheduledTweet) {
 	response, e := http.Get(thread.ImageUrl)
 	if e != nil {
 		log.Fatal(e)
@@ -39,12 +39,14 @@ func SendTweet(thread structs.Thread) {
 
 		str := base64.StdEncoding.EncodeToString([]byte(bodyString))
 
-		hash := getImageHash([]byte(bodyString), thread)
+		hash := ""
+		if checkImageHash {
+			hash = getImageHash([]byte(bodyString), thread)
+			thread.ImageHash = hash
+		}
 
-		thread.ImageHash = hash
-
-		if !database.GetThreadByHash(hash) {
-			database.InsertThread(thread)
+		if !checkImageHash || !database.GetThreadByHash(hash) {
+			if checkImageHash { database.InsertThread(thread) }
 
 			res, err := api.UploadMedia(str);
 			if err != nil {
@@ -52,7 +54,10 @@ func SendTweet(thread structs.Thread) {
 			}
 
 			v := url.Values{}
-
+			if &scheduled != nil {
+				v.Set("in_reply_to_status_id", scheduled.StatusId)
+				thread.Title = "@" + scheduled.ToUser + " " + thread.Title
+			}
 			v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
 
 			println("Posting tweet: " + thread.RedditId)

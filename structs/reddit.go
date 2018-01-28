@@ -2,7 +2,7 @@ package structs
 
 import "github.com/jinzhu/gorm"
 
-type Thread = struct {
+type Thread struct {
 	gorm.Model
 	ImageUrl string `json:"image_url"`
 	Extension string `json:"extension"`

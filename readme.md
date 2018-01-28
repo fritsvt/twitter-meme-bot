@@ -20,8 +20,9 @@ I use [dep](https://github.com/golang/dep) to manage my dependencies so make sur
 $ dep ensure
 $ go run main.go
 ```
+- you may be prompted to install db drivers like mysql and postgres. just run go get 'required_package' and you're good to go.
 
-You can also run this bot on Heroku, just change your `DB_DRIVER` to postgres and update the optional `DATABASE_URL` with the url you receive from Heroku
+You can also run this bot on Heroku, just fill in your `env` info in the settings
 
 ## License
 [WTFPL License](LICENSE)

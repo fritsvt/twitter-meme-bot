@@ -64,3 +64,11 @@
 [[constraint]]
   name = "github.com/devedge/imagehash"
   version = "1.1.0"
+
+[[constraint]]
+  name = "github.com/gorilla/mux"
+  version = "1.6.1"
+
+[[constraint]]
+  name = "github.com/gorilla/sessions"
+  version = "1.1.0"
