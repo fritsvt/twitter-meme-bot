@@ -61,7 +61,7 @@ func SendTweet(thread structs.Thread, checkImageHash bool, scheduled *structs.Sc
 			v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
 
 			println("Posting tweet: " + thread.RedditId)
-			//api.PostTweet(thread.Title,  v);
+			api.PostTweet(thread.Title,  v);
 		} else {
 			println("duplicate image found: " + thread.RedditId)
 		}
