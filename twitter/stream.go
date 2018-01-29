@@ -32,7 +32,7 @@ func StartStream() {
 		case anaconda.Tweet:
 			diff := time.Now().Unix() - lastTweet.Timestamp
 
-			if lastTweet.ScreenName != v.User.ScreenName && diff > 60 {
+			if lastTweet.ScreenName != v.User.ScreenName && diff > 300 {
 				lastTweet = LastTweet{
 					ScreenName:v.User.ScreenName,
 					Timestamp:time.Now().Unix(),
@@ -57,7 +57,7 @@ func StartStream() {
 
 func checkSchedule(username string, statusId string) {
 	scheduledTweet := structs.ScheduledTweet{}
-	database.DB.Where("to_user = ?", username).Order("created_at desc").First(&scheduledTweet)
+	database.DB.Where("to_user = ?", username).Order("created_at asc").First(&scheduledTweet)
 
 	if scheduledTweet.ID != 0 {
 		thread := structs.Thread{

@@ -10,7 +10,7 @@ import (
 
 func GetNewSchedule(w http.ResponseWriter, r *http.Request) {
 	scheduledTweets := []structs.ScheduledTweet{}
-	database.DB.Order("created_at desc").Limit(100).Find(&scheduledTweets)
+	database.DB.Order("created_at asc").Limit(100).Find(&scheduledTweets)
 
 	renderView(w, r, "app.html", "schedule_new_tweet.html", scheduledTweets)
 }
