@@ -7,6 +7,12 @@ This is a twitter bot made in [Golang](https://golang.org), It's goal is to look
 - Light weight
 - Easily customizable
 - Duplicate Image hash checking
+- Tweet scheduling
+
+## Usage
+
+In general there isn't much you have to do to run this bot besides configuring it once.
+But there is a Tweet scheduling feature and if you want to access that you can do so on the `/schedule` route
 
 ## Installation
 
@@ -22,7 +28,15 @@ $ go run main.go
 ```
 - you may be prompted to install db drivers like mysql and postgres. just run go get 'required_package' and you're good to go.
 
-You can also run this bot on Heroku, just fill in your `env` info in the settings
+## Dependencies
+
+The bot uses the following dependencies:
+- [github.com/jinzhu/gorm](https://github.com/jinzhu/gorm)
+- [github.com/turnage/graw/reddit](https://github.com/turnage/graw/reddit)
+- [github.com/ChimeraCoder/anaconda](https://github.com/ChimeraCoder/anaconda)
+- [github.com/devedge/imagehash](https://github.com/devedge/imagehash)
+- [github.com/gorilla/mux](https://github.com/gorilla/mux)
+- [github.com/joho/godotenv](https://github.com/joho/godotenv)
 
 ## License
 [WTFPL License](LICENSE)
