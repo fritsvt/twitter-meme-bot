@@ -24,7 +24,7 @@ I use [dep](https://github.com/golang/dep) to manage my dependencies so make sur
 - Now that your credentials are in place you can execute the 2 commands below and your bot should be up and running.
 ```sh
 $ dep ensure
-$ go run main.go
+$ go run *.go
 ```
 - you may be prompted to install db drivers like mysql and postgres. just run go get 'required_package' and you're good to go.
 
