@@ -53,6 +53,28 @@ func PostNewSchedule(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/schedule", 301)
 }
 
+func GetDeleteSchedule(w http.ResponseWriter, r *http.Request) {
+	if r.FormValue("password") != os.Getenv("ADMIN_PASSWORD") {
+		setFlash("Invalid password", "danger", w, r)
+		redirectBack(w, r)
+		return
+	}
+
+	scheduledTweet := structs.ScheduledTweet{}
+
+	database.DB.Where("id = ?", r.FormValue("id")).First(&scheduledTweet)
+	if scheduledTweet.ID == 0 {
+		setFlash("Scheduled tweet not found", "danger", w, r)
+		redirectBack(w, r)
+		return
+	}
+
+	database.DB.Delete(&scheduledTweet)
+	setFlash("Tweet to @"+scheduledTweet.ToUser + " deleted", "success", w, r)
+	redirectBack(w, r)
+	return
+}
+
 func isValidUrl(toTest string) bool {
 	_, err := url.ParseRequestURI(toTest)
 	if err != nil {
