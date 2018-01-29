@@ -54,7 +54,7 @@ func SendTweet(thread structs.Thread, checkImageHash bool, scheduled *structs.Sc
 			}
 
 			v := url.Values{}
-			if &scheduled != nil {
+			if scheduled.ID != 0 {
 				v.Set("in_reply_to_status_id", scheduled.StatusId)
 				thread.Title = "@" + scheduled.ToUser + " " + thread.Title
 			}

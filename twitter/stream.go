@@ -7,9 +7,17 @@ import (
 	"os"
 	"twitter-meme-bot/structs"
 	"twitter-meme-bot/database"
+	"time"
 )
 
+type LastTweet struct {
+	ScreenName string
+	Timestamp int64
+}
+
 func StartStream() {
+	lastTweet := LastTweet{}
+
 	if os.Getenv("TWITTER_STREAM") != "true" {
 		return
 	}
@@ -22,8 +30,16 @@ func StartStream() {
 	for tweet := range stream.C {
 		switch v := tweet.(type) {
 		case anaconda.Tweet:
+			diff := time.Now().Unix() - lastTweet.Timestamp
+
+			if lastTweet.ScreenName != v.User.ScreenName && diff > 60 {
+				lastTweet = LastTweet{
+					ScreenName:v.User.ScreenName,
+					Timestamp:time.Now().Unix(),
+				}
+				checkSchedule(v.User.ScreenName, v.IdStr)
+			}
 			fmt.Printf("%-15s: %s\n", v.User.ScreenName, v.Text)
-			checkSchedule(v.User.ScreenName, v.IdStr)
 		case anaconda.EventTweet:
 			switch v.Event.Event {
 			case "favorite":
