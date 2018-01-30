@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"reflect"
 	"strings"
+	"os"
 )
 
 var (
@@ -24,11 +25,13 @@ func renderView(w http.ResponseWriter, r *http.Request, baseview string, view st
 	type d struct {
 		Data interface{}
 		Flash flash
+		Version string
 	}
 	t := template.Must(template.ParseFiles("./web/views/layouts/"+baseview, "./web/views/"+view))
 	t.ExecuteTemplate(w, "layout", d{
 		Data:data,
 		Flash:getFlash(w, r),
+		Version: os.Getenv("VERSION"),
 	})
 }
 

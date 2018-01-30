@@ -31,14 +31,15 @@ func StartStream() {
 	for tweet := range stream.C {
 		switch v := tweet.(type) {
 		case anaconda.Tweet:
+			v.User.ScreenName = strings.ToLower(v.User.ScreenName)
 			diff := time.Now().Unix() - lastTweet.Timestamp
 
-			if lastTweet.ScreenName != strings.ToLower(v.User.ScreenName) && diff > 300 {
+			if lastTweet.ScreenName != v.User.ScreenName && diff > 300 {
 				lastTweet = LastTweet{
-					ScreenName:strings.ToLower(v.User.ScreenName),
+					ScreenName:v.User.ScreenName,
 					Timestamp:time.Now().Unix(),
 				}
-				checkSchedule(strings.ToLower(v.User.ScreenName), v.IdStr)
+				go checkSchedule(v.User.ScreenName, v.IdStr)
 			}
 			fmt.Printf("%-15s: %s\n", v.User.ScreenName, v.Text)
 		case anaconda.EventTweet:
