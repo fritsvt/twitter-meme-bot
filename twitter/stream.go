@@ -34,7 +34,7 @@ func StartStream() {
 			v.User.ScreenName = strings.ToLower(v.User.ScreenName)
 			diff := time.Now().Unix() - lastTweet.Timestamp
 
-			if lastTweet.ScreenName != v.User.ScreenName || diff > 300 {
+			if (lastTweet.ScreenName != v.User.ScreenName || diff > 300) && !strings.Contains(v.Text, "RT") {
 				lastTweet = LastTweet{
 					ScreenName:v.User.ScreenName,
 					Timestamp:time.Now().Unix(),
