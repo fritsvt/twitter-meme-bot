@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"log"
 )
 
 func main() {
@@ -37,7 +38,10 @@ func main() {
 	r = web.RegisterRoutes(*r)
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./web/static/")))
 
-	http.ListenAndServe(":"+os.Getenv("PORT"), r)
+	err = http.ListenAndServe(":"+os.Getenv("PORT"), r)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func loopInterval(interval time.Duration) {

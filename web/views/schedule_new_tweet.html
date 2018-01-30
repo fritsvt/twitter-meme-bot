@@ -9,6 +9,9 @@
             code {
                 color: #e83e8c !important;
             }
+            .deleteTweet:hover {
+                cursor: pointer;
+            }
         </style>
 {{ end }}
 
@@ -39,7 +42,7 @@
                             <div style="padding: 10px; margin-bottom: 5px" class="card">
                                 <span><strong>{{ .Title }}</strong> to <a target="_blank" href="https://twitter.com/{{ .ToUser }}"><code>@{{.ToUser}}</code></a></span>
                                 <a target="_blank" href="{{.ImageUrl}}">{{.ImageUrl}}</a>
-                                <span>{{.CreatedAt.Format "Jan 2, at 15:04pm" }}<span class="text-danger float-right" onclick="deleteSchedule({{.ID}})">Delete</span></span>
+                                <span class="deleteTweet">{{.CreatedAt.Format "Jan 2, at 15:04pm" }}<span class="text-danger float-right" onclick="deleteSchedule({{.ID}})">Delete</span></span>
                             </div>
                         {{end}}
                     {{ end }}

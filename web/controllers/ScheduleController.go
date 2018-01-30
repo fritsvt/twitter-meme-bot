@@ -6,11 +6,12 @@ import (
 	"net/url"
 	"twitter-meme-bot/database"
 	"twitter-meme-bot/structs"
+	"strings"
 )
 
 func GetNewSchedule(w http.ResponseWriter, r *http.Request) {
 	scheduledTweets := []structs.ScheduledTweet{}
-	database.DB.Order("created_at asc").Limit(100).Find(&scheduledTweets)
+	database.DB.Order("created_at desc").Limit(100).Find(&scheduledTweets)
 
 	renderView(w, r, "app.html", "schedule_new_tweet.html", scheduledTweets)
 }
@@ -46,7 +47,7 @@ func PostNewSchedule(w http.ResponseWriter, r *http.Request) {
 	database.DB.Create(&structs.ScheduledTweet{
 		ImageUrl:imageUrl,
 		Title:tweetTitle,
-		ToUser:username,
+		ToUser:strings.ToLower(username),
 	})
 
 	setFlash("Tweet scheduled to @"+username, "success", w, r)
