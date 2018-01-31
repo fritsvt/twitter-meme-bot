@@ -32,7 +32,7 @@ $ go run *.go
 
 The bot uses the following dependencies:
 - [github.com/jinzhu/gorm](https://github.com/jinzhu/gorm)
-- [github.com/turnage/graw/reddit](https://github.com/turnage/graw/reddit)
+- [github.com/turnage/graw](https://github.com/turnage/graw)
 - [github.com/ChimeraCoder/anaconda](https://github.com/ChimeraCoder/anaconda)
 - [github.com/devedge/imagehash](https://github.com/devedge/imagehash)
 - [github.com/gorilla/mux](https://github.com/gorilla/mux)
