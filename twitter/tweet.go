@@ -58,7 +58,7 @@ func SendTweet(thread structs.Thread, checkImageHash bool, scheduled *structs.Sc
 				v.Set("in_reply_to_status_id", scheduled.StatusId)
 				thread.Title = "@" + scheduled.ToUser + " " + thread.Title
 			} else {
-				thread.Title = thread.Title + " " + os.Getenv("HASH_TAG")
+				thread.Title = thread.Title + " " + os.Getenv("HASH_TAGS")
 			}
 			v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
 
