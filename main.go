@@ -45,7 +45,7 @@ func main() {
 }
 
 func loopInterval(interval time.Duration) {
-	reddit.GetThreads(false)
+	reddit.GetThreads(true)
 
 	for range time.Tick(time.Second * interval){
 		reddit.GetThreads(true)

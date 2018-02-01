@@ -15,12 +15,17 @@ import (
 	"twitter-meme-bot/database"
 )
 
-var api anaconda.TwitterApi
+var (
+	api anaconda.TwitterApi
+	hashTag = ""
+)
 
 func Setup() {
 	anaconda.SetConsumerKey(os.Getenv("TWITTER_CONSUMER_PUBLIC"))
 	anaconda.SetConsumerSecret(os.Getenv("TWITTER_CONSUMER_SECRET"))
 	api = *anaconda.NewTwitterApi(os.Getenv("TWITTER_ACCESS_TOKEN"), os.Getenv("TWITTER_ACCESS_TOKEN_SECRET"))
+
+	hashTag = os.Getenv("HASH_TAG")
 }
 
 func SendTweet(thread structs.Thread, checkImageHash bool, scheduled *structs.ScheduledTweet) {
@@ -58,7 +63,10 @@ func SendTweet(thread structs.Thread, checkImageHash bool, scheduled *structs.Sc
 				v.Set("in_reply_to_status_id", scheduled.StatusId)
 				thread.Title = "@" + scheduled.ToUser + " " + thread.Title
 			} else {
-				thread.Title = thread.Title + " " + os.Getenv("HASH_TAGS")
+				if hashTag != "" {
+					thread.Title = thread.Title + " #" + hashTag
+					println(thread.Title)
+				}
 			}
 			v.Set("media_ids", strconv.FormatInt(res.MediaID, 10))
 
