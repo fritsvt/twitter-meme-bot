@@ -23,8 +23,8 @@ I use [dep](https://github.com/golang/dep) to manage my dependencies so make sur
 - After installing dep copy the contents of [.env.example](.env.example) into your own .env and fill it out with your credentials.
 - Now that your credentials are in place you can execute the 2 commands below and your bot should be up and running.
 ```sh
-$ dep ensure
-$ go run *.go
+$ go build main.go
+$ ./main
 ```
 - you may be prompted to install db drivers like mysql and postgres. just run go get 'required_package' and you're good to go.
 
