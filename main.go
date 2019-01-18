@@ -1,18 +1,17 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
 	"github.com/gorilla/mux"
-
+	"github.com/joho/godotenv"
 	"twitter-meme-bot/database"
 	"twitter-meme-bot/reddit"
 	"twitter-meme-bot/twitter"
 	"twitter-meme-bot/web"
 
+	"log"
 	"net/http"
 	"os"
 	"time"
-	"log"
 )
 
 func main() {

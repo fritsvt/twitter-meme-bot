@@ -1,6 +1,9 @@
 package database
 
-import "twitter-meme-bot/structs"
+import (
+	"time"
+	"twitter-meme-bot/structs"
+)
 
 func GetThreadById(id string) (bool) {
 	var thread structs.Thread
@@ -19,6 +22,8 @@ func InsertThread(thread structs.Thread) {
 		Title:thread.Title,
 		Author:thread.Author,
 		ImageHash:thread.ImageHash,
+		Upvotes: thread.Upvotes,
+		Timestamp: time.Now().Unix(),
 	})
 }
 

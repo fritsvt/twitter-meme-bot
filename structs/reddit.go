@@ -10,4 +10,6 @@ type Thread struct {
 	RedditId string `json:"id"`
 	Author string `json:"author"`
 	ImageHash string `json:"image_hash"`
+	Upvotes int32 `json:"upvotes"`
+	Timestamp int64 `json:"timestamp"`
 }
