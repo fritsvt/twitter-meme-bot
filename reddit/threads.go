@@ -78,6 +78,7 @@ func filterThread (post *reddit.Post) error {
 			// if it has been an hour
 			interval, _ := strconv.ParseInt(os.Getenv("MIN_TWEET_INTERVAL"), 10, 64)
 			if (time.Now().Unix() - lastThread.Timestamp) >= interval {
+				queuedTweet = structs.Thread{}
 				twitter.SendTweet(queuedTweet, true, &structs.ScheduledTweet{})
 			}
 		} else {
