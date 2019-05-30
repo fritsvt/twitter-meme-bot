@@ -1,17 +1,19 @@
 package twitter
 
 import (
-	"net/url"
-	"github.com/ChimeraCoder/anaconda"
 	"fmt"
+	"net/url"
 	"os"
-	"twitter-meme-bot/structs"
-	"twitter-meme-bot/database"
-	"time"
+	"strconv"
 	"strings"
+	"time"
+
+	"twitter-meme-bot/database"
+	"twitter-meme-bot/structs"
 )
 
 type LastTweet struct {
+	ID int64
 	ScreenName string
 	Timestamp int64
 }
@@ -23,35 +25,40 @@ func StartStream() {
 		return
 	}
 
-	println("Starting streaming twitter feed...")
+	// Fetch feed every 10 secs
+	for range time.Tick(time.Second * 10) {
+		println("Fetching latest timeline")
 
-	v := url.Values{}
+		sinceID := "1"
+		if lastTweet.ID != 0 {
+			sinceID = strconv.FormatInt(lastTweet.ID, 10)
+		}
+		// fetch from api
+		res, _ := api.GetHomeTimeline(url.Values{
+			"count": {"50"},
+			"since_id": { sinceID },
+			"exclude_replies": {"true"},
+		})
 
-	stream := api.UserStream(v)
-	for tweet := range stream.C {
-		switch v := tweet.(type) {
-		case anaconda.Tweet:
-			v.User.ScreenName = strings.ToLower(v.User.ScreenName)
-			diff := time.Now().Unix() - lastTweet.Timestamp
+		for _, tweet := range res {
+			layout := "Mon Jan 2 15:04:05 -0700 2006"
 
-			if (lastTweet.ScreenName != v.User.ScreenName || diff > 300) && !strings.Contains(v.Text, "RT") {
-				lastTweet = LastTweet{
-					ScreenName:v.User.ScreenName,
-					Timestamp:time.Now().Unix(),
-				}
-				go checkSchedule(v.User.ScreenName, v.IdStr)
+			t, err := time.Parse(layout, tweet.CreatedAt)
+			if err != nil {
+				fmt.Println(err)
 			}
-			fmt.Printf("%-15s: %s\n", v.User.ScreenName, v.Text)
-		case anaconda.EventTweet:
-			switch v.Event.Event {
-			case "favorite":
-				sn := v.Source.ScreenName
-				tw := v.TargetObject.Text
-				fmt.Printf("Favorited by %-15s: %s\n", sn, tw)
-			case "unfavorite":
-				sn := v.Source.ScreenName
-				tw := v.TargetObject.Text
-				fmt.Printf("UnFavorited by %-15s: %s\n", sn, tw)
+			timestamp := t.UnixNano()
+
+			// new tweet
+			if lastTweet.Timestamp < timestamp {
+				lastTweet = LastTweet{
+					ID: tweet.Id,
+					ScreenName: tweet.User.ScreenName,
+					Timestamp: timestamp,
+				}
+
+				// check new tweet against schedule
+				go checkSchedule(strings.ToLower(tweet.User.ScreenName), tweet.IdStr)
 			}
 		}
 	}

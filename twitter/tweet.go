@@ -1,18 +1,18 @@
 package twitter
 
 import (
-	"os"
+	"encoding/base64"
+	"encoding/hex"
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/devedge/imagehash"
-	"log"
-	"net/url"
-	"net/http"
-	"encoding/base64"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"net/url"
+	"os"
 	"strconv"
-	"twitter-meme-bot/structs"
-	"encoding/hex"
 	"twitter-meme-bot/database"
+	"twitter-meme-bot/structs"
 )
 
 var (
